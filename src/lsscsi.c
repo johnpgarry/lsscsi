@@ -45,7 +45,7 @@
 #include "sg_unaligned.h"
 
 
-static const char * version_str = "0.32  2020/11/12 [svn: r165]";
+static const char * version_str = "0.32  2020/12/24 [svn: r165]";
 
 #define FT_OTHER 0
 #define FT_BLOCK 1
@@ -2152,7 +2152,7 @@ transport_init(const char * devname, /* const struct lsscsi_opts * op, */
 
         /* SBP (FireWire) host */
         do {
-                char *t, buff2[LMAX_DEVPATH];
+                char *t, buff2[LMAX_DEVPATH - 4];
 
                 /* resolve SCSI host device */
                 snprintf(buff, sizeof(buff), "%s%s%s%s", sysfsroot, scsi_host,
@@ -3339,7 +3339,7 @@ one_sdev_entry(const char * dir_name, const char * devname,
 {
         bool get_wwn = false;
         int n, vlen;
-        int dec_pdt = 0;	/* decoded PDT; called 'type' in sysfs */
+        int dec_pdt = 0;        /* decoded PDT; called 'type' in sysfs */
         int devname_len = 13;
         char buff[LMAX_DEVPATH];
         char extra[LMAX_DEVPATH];
@@ -3970,7 +3970,7 @@ one_nhost_entry(const char * dir_name, const char * nvme_ctl_rel,
                 printf("[N:%u]  ", cdev_minor);
         else
                 printf("[N:?]  ");
-        snprintf(buff, sizeof(buff), "%s%s", dir_name, nvme_ctl_rel);
+        snprintf(buff, sizeof(buff), "%.256s%.32s", dir_name, nvme_ctl_rel);
 
         if (op->kname)
                 snprintf(value, vlen, "%s/%s", dev_dir, nvme_ctl_rel);
@@ -4407,8 +4407,8 @@ one_host_entry(const char * dir_name, const char * devname,
         } else
                 printf("  proc_name=????  ");
         if (op->transport_info) {
-                if (transport_init(devname, /* op, */ vlen, value))
-                        printf("%s\n", value);
+                if (transport_init(devname, /* op, */ blen, buff))
+                        printf("%s\n", buff);
                 else
                         printf("\n");
         } else
