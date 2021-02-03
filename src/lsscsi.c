@@ -4319,6 +4319,10 @@ longer_h_entry(const char * path_name, const struct lsscsi_opts * op)
                         printf("  host_busy=%s\n", value);
                 else if (op->verbose)
                         printf("  host_busy=?\n");
+                if (get_value(path_name, "nr_hw_queues", value, vlen))
+                        printf("  nr_hw_queues=%s\n", value);
+                else if (op->verbose)
+                        printf("  nr_hw_queues=?\n");
                 if (get_value(path_name, "sg_tablesize", value, vlen))
                         printf("  sg_tablesize=%s\n", value);
                 else if (op->verbose)
